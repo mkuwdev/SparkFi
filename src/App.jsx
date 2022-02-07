@@ -4,13 +4,16 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
+  Link
 } from "react-router-dom";
 import Account from "components/Account";
 import { Layout} from "antd";
 import "antd/dist/antd.css";
 import "./style.css";
 import Main from "components/Main"
+import VenturePage from "components/VenturePage"
+
 const { Header} = Layout;
 
 const styles = {
@@ -44,6 +47,7 @@ const styles = {
   },
 };
 const App = ({ isServerInfo }) => {
+  
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
     useMoralis();
 
@@ -56,27 +60,32 @@ const App = ({ isServerInfo }) => {
     <Layout style={{ height: "100vh", overflow: "auto" }}>
       <Router>
         <Header style={styles.header}>
-          <Logo />
+          <Link to="/explore">
+            <Logo />
+          </Link>
           <div style={styles.headerRight}>
             <Account />
           </div>
         </Header>
         <div style={styles.content}>
           <Switch>
-            <Route path="/main">
+            <Route path="/explore/:contentId">
+                <VenturePage />
+            </Route>
+            <Route path="/explore">
                 <Main/>
             </Route>
             <Route path="/nonauthenticated">
-              <h3>Please login using the "Authenticate" button</h3>
+              <h3>Connect your wallet to access app 🦊</h3>
             </Route>
           </Switch>
-          {isAuthenticated ? <Redirect to="/main" /> : <Redirect to="/nonauthenticated" />}
+          {isAuthenticated ? <Redirect to="/explore" /> : <Redirect to="/nonauthenticated" />}
         </div>
       </Router>
     </Layout>
   );
 };
 
-export const Logo = () => <h4>Decentradit</h4>
+export const Logo = () => <h3>🌠SparkFi</h3>
 
 export default App;
